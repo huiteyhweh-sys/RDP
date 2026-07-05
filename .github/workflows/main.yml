@@ -8,11 +8,15 @@ jobs:
       - name: Setup environment
         run: |
           sudo apt-get update
-          sudo apt-get install -y xrdp xfce4
-          # تعيين كلمة مرور للمستخدم runner
+          # تثبيت واجهة XFCE و XRDP
+          sudo apt-get install -y xfce4 xfce4-goodies xrdp
+          # إضافة إعدادات الواجهة للمستخدم runner
+          echo xfce4-session > ~/.xsession
+          # تعيين كلمة المرور
           echo "runner:123456" | sudo chpasswd
-          sudo systemctl enable xrdp
-          sudo systemctl start xrdp
+          # ضبط صلاحيات xrdp
+          sudo adduser xrdp ssl-cert
+          sudo systemctl restart xrdp
           
       - name: Install Cloudflare
         run: |
@@ -21,15 +25,10 @@ jobs:
           
       - name: Start Tunnel
         run: |
-          # تشغيل النفق وتوجيه السجلات لملف
           ./cloudflared tunnel --url rdp://localhost:3389 > tunnel.log 2>&1 &
-          
-          echo "جاري تشغيل النفق، يرجى الانتظار 20 ثانية..."
-          sleep 20
-          
+          sleep 10
           echo "----------------------------------------"
           echo "رابط الوصول الخاص بك هو:"
           grep -o 'https://.*trycloudflare.com' tunnel.log
           echo "----------------------------------------"
-          
           sleep 6h
