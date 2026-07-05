@@ -1,0 +1,11 @@
+name: RDP
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Start RDP
+        run: |
+          curl -sL https://gist.githubusercontent.com/cyb3rking/xxx/raw/rdp.sh | bash
+          echo "NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}"
