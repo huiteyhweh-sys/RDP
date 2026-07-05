@@ -6,11 +6,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Start RDP
         env:
           NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
         run: |
-          curl -sL https://gist.githubusercontent.com/rohit-gajjar/c03d7915598696700c25d81223280036/raw/rdp.sh | bash
+          curl -sL https://raw.githubusercontent.com/manish-sahu/rdp-github-action/master/rdp.sh | bash
