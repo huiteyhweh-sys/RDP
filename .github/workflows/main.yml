@@ -9,6 +9,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y xrdp xfce4
+          # تعيين كلمة مرور للمستخدم runner
+          echo "runner:123456" | sudo chpasswd
           sudo systemctl enable xrdp
           sudo systemctl start xrdp
           
@@ -19,13 +21,12 @@ jobs:
           
       - name: Start Tunnel
         run: |
-          # تشغيل النفق في الخلفية وتوجيه المخرجات لملف
+          # تشغيل النفق وتوجيه السجلات لملف
           ./cloudflared tunnel --url rdp://localhost:3389 > tunnel.log 2>&1 &
           
-          echo "جاري تشغيل النفق، يرجى الانتظار..."
-          sleep 15
+          echo "جاري تشغيل النفق، يرجى الانتظار 20 ثانية..."
+          sleep 20
           
-          # البحث عن الرابط في ملف السجلات وطباعته
           echo "----------------------------------------"
           echo "رابط الوصول الخاص بك هو:"
           grep -o 'https://.*trycloudflare.com' tunnel.log
